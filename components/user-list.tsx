@@ -273,7 +273,7 @@ export function UserList({ users, loading }: UserListProps) {
                           <div className="flex-1 min-w-0">
                             <h3 className="text-sm font-medium truncate">{user.username}</h3>
                             <p className="text-xs text-muted-foreground truncate mb-1">ID: {user.id}</p>
-                            <div className="flex flex-col items-center justify-center my-2">
+                            <div className="flex flex-col items-start justify-center my-2 gap-1">
                               <div className="flex items-center gap-2">
                                 <Smartphone className="h-4 w-4 text-primary" />
                                 <span className={`text-xs font-semibold ${user.device ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -281,7 +281,7 @@ export function UserList({ users, loading }: UserListProps) {
                                 </span>
                               </div>
                             </div>
-                            <div className="flex items-center justify-between gap-2 mt-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-2">
                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <CalendarIcon className="h-3 w-3" />
                                 <span>Vence: {formatDate(user.expirationDate)}</span>
@@ -291,15 +291,70 @@ export function UserList({ users, loading }: UserListProps) {
                                 <span>Creado: {user.createdAt ? formatDate(user.createdAt) : 'Desconocido'}</span>
                               </div>
                             </div>
+                            {/* ACCIONES SOLO EN MÓVIL */}
+                            <div className="flex gap-2 mt-2 sm:hidden">
+                              <Badge variant={status.color} className={status.className + ' min-w-[48px] justify-center'}>
+                                {status.days <= 0 ? "Expirado" : `${status.days} días`}
+                              </Badge>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => editUser(user)}
+                                className="interactive-element"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => copyCredentials(user)}
+                                className="interactive-element hover:bg-green-50 hover:border-green-200 dark:hover:bg-green-900/20 dark:hover:border-green-700"
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="interactive-element hover:bg-red-50 hover:border-red-200 dark:hover:bg-red-900/20 dark:hover:border-red-700"
+                                    disabled={deleteLoading === user.id}
+                                  >
+                                    {deleteLoading === user.id ? (
+                                      <div className="loading-spinner animate-spin rounded-full h-4 w-4 border-b-2"></div>
+                                    ) : (
+                                      <Trash2 className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="glass-effect">
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>¿Eliminar usuario?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Esta acción eliminará permanentemente al usuario <strong>"{user.username}"</strong> de
+                                      Firebase. Esta acción no se puede deshacer.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => deleteUser(user.id, user.username)}
+                                      className="bg-destructive hover:bg-destructive/90"
+                                    >
+                                      Eliminar Usuario
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
                           </div>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-2">
-                        <Badge variant={status.color} className={status.className}>
+                      {/* ACCIONES SOLO EN ESCRITORIO */}
+                      <div className="hidden sm:flex items-center gap-2">
+                        <Badge variant={status.color} className={status.className + ' min-w-[48px] justify-center'}>
                           {status.days <= 0 ? "Expirado" : `${status.days} días`}
                         </Badge>
-
                         <Button
                           variant="outline"
                           size="sm"
@@ -308,7 +363,6 @@ export function UserList({ users, loading }: UserListProps) {
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-
                         <Button
                           variant="outline"
                           size="sm"
@@ -317,7 +371,6 @@ export function UserList({ users, loading }: UserListProps) {
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
-
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button

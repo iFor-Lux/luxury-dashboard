@@ -15,6 +15,7 @@ import type { User } from "@/types/user"
 import { database } from "@/lib/firebase"
 import { ref, onValue } from "firebase/database"
 import { AlertCircle, Wifi, WifiOff, Shield, Loader2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function Dashboard() {
   const { user: authUser, loading: authLoading, error: authError, isAuthenticated } = useFirebaseAuth()
@@ -22,6 +23,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isConnected, setIsConnected] = useState(true)
+  const [tabValue, setTabValue] = useState("create")
 
   useEffect(() => {
     if (!isAuthenticated || authLoading) {
@@ -136,13 +138,13 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold luxury-logo">Luxury Dashboard Admin</h1>
-              <p className="text-muted-foreground mt-2">Panel de administración para gestionar usuarios y notificaciones</p>
-            </div>
-            <div className="flex items-center gap-4">
+        <div className="mb-8 mt-6 sm:mt-8">
+          {/* SOLO EN MÓVIL: Título centrado */}
+          <h1 className="text-2xl sm:text-3xl font-bold luxury-logo mb-2 text-center sm:text-left">Luxury Dashboard Admin</h1>
+          {/* SOLO EN MÓVIL: Grid para descripción y estados */}
+          <div className="grid grid-cols-1 sm:flex sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-muted-foreground text-base sm:text-lg mb-0 sm:mb-0 col-span-1 sm:col-auto text-center sm:text-left">Panel de administración para gestionar usuarios y notificaciones</p>
+            <div className="flex flex-row justify-center sm:justify-end items-center gap-2 sm:gap-4 mt-2 sm:mt-0 col-span-1 sm:col-auto">
               <ThemeToggle />
               {isAuthenticated && (
                 <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
@@ -185,8 +187,22 @@ export default function Dashboard() {
           )}
         </div>
 
-        <Tabs defaultValue="create" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+        {/* Select solo en móvil, ahora con diseño moderno */}
+        <div className="sm:hidden mb-4">
+          <Select value={tabValue} onValueChange={setTabValue}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecciona una sección" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="create">Crear Usuario</SelectItem>
+              <SelectItem value="users">Gestión de Usuarios</SelectItem>
+              <SelectItem value="notifications">Notificaciones</SelectItem>
+              <SelectItem value="updates">Updates</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-4">
+          <TabsList className="hidden sm:grid w-full grid-cols-4">
             <TabsTrigger value="create" className="interactive-element">Crear Usuario</TabsTrigger>
             <TabsTrigger value="users" className="interactive-element">Gestión de Usuarios</TabsTrigger>
             <TabsTrigger value="notifications" className="interactive-element">Notificaciones</TabsTrigger>
