@@ -198,6 +198,7 @@ export default function Dashboard() {
               <SelectItem value="users">Gestión de Usuarios</SelectItem>
               <SelectItem value="notifications">Notificaciones</SelectItem>
               <SelectItem value="updates">Updates</SelectItem>
+              <SelectItem value="files">Archivos</SelectItem>
             </SelectContent>
           </Select>
         </div>
