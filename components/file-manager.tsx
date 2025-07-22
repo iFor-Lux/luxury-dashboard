@@ -106,7 +106,7 @@ const TextIcon = ({ className = "text-blue-300" }: { className?: string }) => (
 
 const GITHUB_REPO = "iFor-Lux/luxury-files";
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}/contents/`;
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 
 // Función para obtener el icono según el archivo
 function getFileIcon(name: string, type: string) {
