@@ -16,6 +16,7 @@ import { database } from "@/lib/firebase"
 import { ref, onValue } from "firebase/database"
 import { AlertCircle, Wifi, WifiOff, Shield, Loader2 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import FileManager from "@/components/file-manager"
 
 export default function Dashboard() {
   const { user: authUser, loading: authLoading, error: authError, isAuthenticated } = useFirebaseAuth()
@@ -203,11 +204,12 @@ export default function Dashboard() {
           </Select>
         </div>
         <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-4">
-          <TabsList className="hidden sm:grid w-full grid-cols-4">
+          <TabsList className="hidden sm:grid w-full grid-cols-5">
             <TabsTrigger value="create" className="interactive-element">Crear Usuario</TabsTrigger>
             <TabsTrigger value="users" className="interactive-element">Gestión de Usuarios</TabsTrigger>
             <TabsTrigger value="notifications" className="interactive-element">Notificaciones</TabsTrigger>
             <TabsTrigger value="updates" className="interactive-element">Updates</TabsTrigger>
+            <TabsTrigger value="files" className="interactive-element">Archivos</TabsTrigger>
           </TabsList>
 
           <TabsContent value="create">
@@ -306,6 +308,20 @@ export default function Dashboard() {
                     </AlertDescription>
                   </Alert>
                 )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="files">
+            <Card className="card-hover">
+              <CardHeader>
+                <CardTitle>Sección 5: Archivos</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Aquí podrás gestionar archivos (subir, ver, eliminar, etc.)
+                </p>
+              </CardHeader>
+              <CardContent>
+                <FileManager />
               </CardContent>
             </Card>
           </TabsContent>

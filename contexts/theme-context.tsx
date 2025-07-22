@@ -53,9 +53,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTheme,
   }
 
-  // Evitar hidration mismatch
+  // Evitar hydration mismatch
   if (!mounted) {
-    return <div className="min-h-screen bg-gray-50">{children}</div>
+    return null
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
